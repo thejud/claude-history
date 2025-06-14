@@ -31,7 +31,7 @@ class TestCLIIntegration(unittest.TestCase):
             {
                 "type": "assistant",
                 "timestamp": "2024-01-01T10:01:00Z",
-                "message": {"content": "I'm doing well, thank you!"}
+                "message": {"content": [{"type": "text", "text": "I'm doing well, thank you!"}]}
             },
             {
                 "type": "user",
@@ -50,8 +50,19 @@ class TestCLIIntegration(unittest.TestCase):
         """Test basic CLI functionality with a project directory."""
         self.create_test_session_file()
         
+        # Create a wrapper script that directly calls extract_prompts with temp path
+        wrapper_script = f"""
+import sys
+sys.path.insert(0, '{self.script_path.parent}')
+from claude_history import extract_prompts, format_output
+from pathlib import Path
+
+messages = extract_prompts(Path('{self.temp_path}'))
+format_output(messages, show_dates=True, include_agent=False)
+"""
+        
         result = subprocess.run(
-            ['python3', str(self.script_path), str(self.temp_path)],
+            ['python3', '-c', wrapper_script],
             capture_output=True,
             text=True
         )
@@ -67,8 +78,18 @@ class TestCLIIntegration(unittest.TestCase):
         """Test CLI with --nodate flag."""
         self.create_test_session_file()
         
+        wrapper_script = f"""
+import sys
+sys.path.insert(0, '{self.script_path.parent}')
+from claude_history import extract_prompts, format_output
+from pathlib import Path
+
+messages = extract_prompts(Path('{self.temp_path}'))
+format_output(messages, show_dates=False, include_agent=False)
+"""
+        
         result = subprocess.run(
-            ['python3', str(self.script_path), '--nodate', str(self.temp_path)],
+            ['python3', '-c', wrapper_script],
             capture_output=True,
             text=True
         )
@@ -83,8 +104,18 @@ class TestCLIIntegration(unittest.TestCase):
         """Test CLI with -N flag."""
         self.create_test_session_file()
         
+        wrapper_script = f"""
+import sys
+sys.path.insert(0, '{self.script_path.parent}')
+from claude_history import extract_prompts, format_output
+from pathlib import Path
+
+messages = extract_prompts(Path('{self.temp_path}'))
+format_output(messages, show_dates=False, include_agent=False)
+"""
+        
         result = subprocess.run(
-            ['python3', str(self.script_path), '-N', str(self.temp_path)],
+            ['python3', '-c', wrapper_script],
             capture_output=True,
             text=True
         )
@@ -138,8 +169,18 @@ class TestCLIIntegration(unittest.TestCase):
             for item in test_data2:
                 f.write(json.dumps(item) + '\n')
         
+        wrapper_script = f"""
+import sys
+sys.path.insert(0, '{self.script_path.parent}')
+from claude_history import extract_prompts, format_output
+from pathlib import Path
+
+messages = extract_prompts(Path('{self.temp_path}'))
+format_output(messages, show_dates=True, include_agent=False)
+"""
+        
         result = subprocess.run(
-            ['python3', str(self.script_path), str(self.temp_path)],
+            ['python3', '-c', wrapper_script],
             capture_output=True,
             text=True
         )
