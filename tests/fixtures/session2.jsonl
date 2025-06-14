@@ -1,0 +1,6 @@
+{"type": "user", "timestamp": "2024-01-01T09:30:00Z", "message": {"content": "Can you review my code for performance issues?"}}
+{"type": "assistant", "timestamp": "2024-01-01T09:31:00Z", "message": {"content": [{"type": "text", "text": "I'd be glad to review your code for performance issues. Please share the code you'd like me to look at."}]}}
+{"type": "user", "timestamp": "2024-01-01T09:32:00Z", "message": {"content": "Here's my function that processes large datasets..."}}
+invalid json line that should be ignored
+{"type": "system", "timestamp": "2024-01-01T09:33:00Z", "message": {"content": "System message that should be ignored"}}
+{"type": "user", "timestamp": "2024-01-01T09:34:00Z", "message": {"content": "What about memory optimization techniques?"}}

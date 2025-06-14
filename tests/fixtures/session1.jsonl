@@ -1,0 +1,5 @@
+{"type": "user", "timestamp": "2024-01-01T10:00:00Z", "message": {"content": "Hello, I need help with a Python script"}}
+{"type": "assistant", "timestamp": "2024-01-01T10:01:00Z", "message": {"content": [{"type": "text", "text": "I'd be happy to help you with your Python script. What specific issue are you facing?"}]}}
+{"type": "user", "timestamp": "2024-01-01T10:02:00Z", "message": {"content": "I want to parse JSON files and extract specific data"}}
+{"type": "assistant", "timestamp": "2024-01-01T10:03:00Z", "message": {"content": [{"type": "text", "text": "Great! JSON parsing in Python is straightforward using the built-in json module. Here's how you can do it:"}]}}
+{"type": "user", "timestamp": "2024-01-01T10:04:00Z", "message": {"content": "Perfect! Can you also show me how to handle errors?"}}

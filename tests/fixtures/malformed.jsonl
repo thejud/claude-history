@@ -1,0 +1,5 @@
+{"type": "user", "timestamp": "2024-01-01T08:00:00Z", "message": {"content": "This is a valid entry"}}
+{invalid json
+{"incomplete": "json"
+{"type": "user", "message": {"content": "Missing timestamp"}}
+{"type": "user", "timestamp": "2024-01-01T08:01:00Z", "message": {"content": "Another valid entry"}}
