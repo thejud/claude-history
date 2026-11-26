@@ -22,6 +22,7 @@ Examples:
 
 import argparse
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -43,29 +44,12 @@ def get_claude_project_path(project_dir: Optional[str] = None) -> Path:
     else:
         project_path = Path(project_dir).resolve()
     
-    # Convert path to Claude's naming convention (replace / with -)
-    escaped_path = str(project_path).replace('/', '-')
+    # Claude's naming replaces every non-alphanumeric with -, including Windows \ and :
+    escaped_path = re.sub(r'[^A-Za-z0-9]', '-', str(project_path))
     claude_projects_dir = Path.home() / '.claude' / 'projects'
     
-    # Look for exact match first
-    claude_dir = claude_projects_dir / escaped_path
-    if claude_dir.exists():
-        return claude_dir
-    
-    # If not found, search for matching directories
-    if claude_projects_dir.exists():
-        project_name = project_path.name
-        # Try with both underscores and dashes
-        search_names = [project_name, project_name.replace('_', '-'), project_name.replace('-', '_')]
-        
-        for dir_path in claude_projects_dir.iterdir():
-            if dir_path.is_dir():
-                for search_name in search_names:
-                    if search_name in dir_path.name:
-                        return dir_path
-    
-    # Return the expected path if no match found
-    return claude_dir
+    # Exact match only: a similar name can belong to another project
+    return claude_projects_dir / escaped_path
 
 
 def extract_prompts(claude_dir: Path, include_agent: bool = False) -> List[tuple]:
