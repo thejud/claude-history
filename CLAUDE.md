@@ -38,7 +38,7 @@ python3 run_tests.py integration             # Integration tests only
 
 The application follows a functional design with four main components:
 
-1. **Path Resolution (`get_claude_project_path`)**: Converts project paths to Claude's internal naming convention (replacing `/` with `-`) and searches for matching session directories in `~/.claude/projects/`
+1. **Path Resolution (`get_claude_project_path`)**: Converts project paths to Claude's internal naming convention (replacing every non-alphanumeric character with `-`) and returns the exact session directory in `~/.claude/projects/`, with no similar-name fallback
 
 2. **Data Extraction (`extract_prompts`)**: Parses JSONL files to extract user messages and optionally assistant responses with timestamps, filtering for appropriate message types with string content
 
@@ -59,7 +59,7 @@ The project includes comprehensive tests:
 - **Test Runner** (`run_tests.py`): Utility to run specific test suites
 
 Key test scenarios covered:
-- Path resolution and fuzzy matching
+- Path resolution (exact match only)
 - JSONL parsing with malformed data handling  
 - Chronological sorting across multiple files
 - CLI argument parsing including `--nodate/-N` and `--agent/-a` flags

@@ -27,27 +27,29 @@ class TestGetClaudeProjectPath(unittest.TestCase):
         claude_projects_dir = self.temp_path / '.claude' / 'projects'
         claude_projects_dir.mkdir(parents=True)
         
-        project_path = Path('/test/project')
-        expected_dir = claude_projects_dir / '-test-project'
+        # On Windows resolve() adds the drive: C:\test\project -> C--test-project
+        drive = Path('/').resolve().drive.replace(':', '-')
+        expected_dir = claude_projects_dir / f'{drive}-test-project'
         expected_dir.mkdir()
         
         result = get_claude_project_path('/test/project')
         self.assertEqual(result, expected_dir)
 
     @patch('claude_history.Path.home')
-    def test_fuzzy_match_with_underscores(self, mock_home):
-        """Test fuzzy matching with underscores and dashes."""
+    def test_similar_name_is_not_matched(self, mock_home):
+        """Test that another project with a similar name is never returned."""
         mock_home.return_value = self.temp_path
         claude_projects_dir = self.temp_path / '.claude' / 'projects'
         claude_projects_dir.mkdir(parents=True)
         
-        # Create a directory that should match via fuzzy search
+        # A look-alike directory that must be ignored
         existing_dir = claude_projects_dir / 'some-prefix-my_project-suffix'
         existing_dir.mkdir()
         
         with patch('claude_history.Path.cwd', return_value=Path('/path/to/my-project')):
             result = get_claude_project_path()
-            self.assertEqual(result, existing_dir)
+            self.assertNotEqual(result, existing_dir)
+            self.assertFalse(result.exists())
 
     @patch('claude_history.Path.home')
     def test_no_match_returns_expected_path(self, mock_home):
@@ -58,7 +60,8 @@ class TestGetClaudeProjectPath(unittest.TestCase):
         
         project_path = '/nonexistent/project'
         result = get_claude_project_path(project_path)
-        expected = claude_projects_dir / '-nonexistent-project'
+        drive = Path('/').resolve().drive.replace(':', '-')
+        expected = claude_projects_dir / f'{drive}-nonexistent-project'
         self.assertEqual(result, expected)
 
     @patch('claude_history.Path.cwd')

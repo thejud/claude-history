@@ -2,6 +2,7 @@
 
 import json
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -53,16 +54,16 @@ class TestCLIIntegration(unittest.TestCase):
         # Create a wrapper script that directly calls extract_prompts with temp path
         wrapper_script = f"""
 import sys
-sys.path.insert(0, '{self.script_path.parent}')
+sys.path.insert(0, {str(self.script_path.parent)!r})
 from claude_history import extract_prompts, format_output
 from pathlib import Path
 
-messages = extract_prompts(Path('{self.temp_path}'))
+messages = extract_prompts(Path({str(self.temp_path)!r}))
 format_output(messages, show_dates=True, include_agent=False)
 """
         
         result = subprocess.run(
-            ['python3', '-c', wrapper_script],
+            [sys.executable, '-c', wrapper_script],
             capture_output=True,
             text=True
         )
@@ -80,16 +81,16 @@ format_output(messages, show_dates=True, include_agent=False)
         
         wrapper_script = f"""
 import sys
-sys.path.insert(0, '{self.script_path.parent}')
+sys.path.insert(0, {str(self.script_path.parent)!r})
 from claude_history import extract_prompts, format_output
 from pathlib import Path
 
-messages = extract_prompts(Path('{self.temp_path}'))
+messages = extract_prompts(Path({str(self.temp_path)!r}))
 format_output(messages, show_dates=False, include_agent=False)
 """
         
         result = subprocess.run(
-            ['python3', '-c', wrapper_script],
+            [sys.executable, '-c', wrapper_script],
             capture_output=True,
             text=True
         )
@@ -106,16 +107,16 @@ format_output(messages, show_dates=False, include_agent=False)
         
         wrapper_script = f"""
 import sys
-sys.path.insert(0, '{self.script_path.parent}')
+sys.path.insert(0, {str(self.script_path.parent)!r})
 from claude_history import extract_prompts, format_output
 from pathlib import Path
 
-messages = extract_prompts(Path('{self.temp_path}'))
+messages = extract_prompts(Path({str(self.temp_path)!r}))
 format_output(messages, show_dates=False, include_agent=False)
 """
         
         result = subprocess.run(
-            ['python3', '-c', wrapper_script],
+            [sys.executable, '-c', wrapper_script],
             capture_output=True,
             text=True
         )
@@ -129,7 +130,7 @@ format_output(messages, show_dates=False, include_agent=False)
         nonexistent_path = self.temp_path / 'nonexistent'
         
         result = subprocess.run(
-            ['python3', str(self.script_path), str(nonexistent_path)],
+            [sys.executable, str(self.script_path), str(nonexistent_path)],
             capture_output=True,
             text=True
         )
@@ -140,7 +141,7 @@ format_output(messages, show_dates=False, include_agent=False)
     def test_cli_help_flag(self):
         """Test CLI help flag."""
         result = subprocess.run(
-            ['python3', str(self.script_path), '--help'],
+            [sys.executable, str(self.script_path), '--help'],
             capture_output=True,
             text=True
         )
@@ -171,16 +172,16 @@ format_output(messages, show_dates=False, include_agent=False)
         
         wrapper_script = f"""
 import sys
-sys.path.insert(0, '{self.script_path.parent}')
+sys.path.insert(0, {str(self.script_path.parent)!r})
 from claude_history import extract_prompts, format_output
 from pathlib import Path
 
-messages = extract_prompts(Path('{self.temp_path}'))
+messages = extract_prompts(Path({str(self.temp_path)!r}))
 format_output(messages, show_dates=True, include_agent=False)
 """
         
         result = subprocess.run(
-            ['python3', '-c', wrapper_script],
+            [sys.executable, '-c', wrapper_script],
             capture_output=True,
             text=True
         )
